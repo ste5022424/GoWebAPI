@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+func main() {
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/", Index)
+	router.HandleFunc("/news", News)
+	router.HandleFunc("/news/{DetailID}", Detail)
+
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func Index(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Home!")
+}
+
+func News(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "最新消息 Master")
+}
+
+func Detail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	DetailID := vars["DetailID"]
+	fmt.Fprintln(w, "最新消息 Detail ID:", DetailID)
+}
